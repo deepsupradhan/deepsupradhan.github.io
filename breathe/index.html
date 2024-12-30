@@ -12,7 +12,7 @@
         align-items: center;
         height: 100vh;
         margin: 0;
-        background: radial-gradient(circle, #1b1e34, #312244, #604f6a);
+        background: radial-gradient(circle, #1c1b33, #312244, #604f6a);
         color: white;
       }
       .container {
@@ -20,28 +20,40 @@
       }
       .circle {
         width: 100px;
-        height: 100px;
+        height: 90px;
         border-radius: 50%;
-        background-color: rgba(255, 255, 255, 0.8);
-        margin: 20px auto;
+        background-color: rgba(168, 220, 240, 0.897);
+        margin: 30px auto;
         animation-timing-function: ease-in-out;
       }
       .instructions {
         font-size: 28px;
         margin-top: 20px;
       }
-      .start-btn {
+      .btn-group {
+        margin-top: 30px;
+      }
+      .btn {
         padding: 10px 20px;
         font-size: 18px;
-        background-color: #6c63ff;
-        color: white;
+        margin: 5px;
         border: none;
         border-radius: 5px;
         cursor: pointer;
-        margin-top: 30px;
+      }
+      .start-btn {
+        background-color: #6c63ff;
+        color: white;
       }
       .start-btn:hover {
         background-color: #817af4;
+      }
+      .stop-btn {
+        background-color: #ff4d4d;
+        color: white;
+      }
+      .stop-btn:hover {
+        background-color: #ff7a7a;
       }
       .header {
         font-size: 36px;
@@ -59,45 +71,75 @@
     <div class="container">
       <div class="header">Meditation Breathing Exercise</div>
       <div class="circle"></div>
-      <div class="instructions">Click "Start" to begin...</div>
-      <button class="start-btn">Start</button>
-      <div class="credits">Breathe in harmony. Relax your mind.</div>
+      <div class="instructions">Click "Start" to Begin</div>
+      <div class="btn-group">
+        <button class="btn start-btn">Start</button>
+        <button class="btn stop-btn" style="display: none">Stop</button>
+      </div>
+      <div class="credits">Breathe in Harmony. Relax your Mind.</div>
     </div>
 
     <script>
       const circle = document.querySelector(".circle");
       const instructions = document.querySelector(".instructions");
       const startBtn = document.querySelector(".start-btn");
+      const stopBtn = document.querySelector(".stop-btn");
       const cycleDuration = 4000; // 4 seconds per step
 
       const breathingSteps = [
-        { text: "Inhale deeply...", scale: 1.5 },
-        { text: "Hold your breath...", scale: 1.5 },
-        { text: "Exhale slowly...", scale: 1 },
-        { text: "Hold still...", scale: 1 },
+        { text: "Inhale", scale: 1.5, sound: "inhale.mp3" },
+        { text: "Hold", scale: 1.5, sound: "hold.mp3" },
+        { text: "Exhale", scale: 1, sound: "exhale.mp3" },
+        { text: "Hold", scale: 1, sound: "hold.mp3" },
       ];
 
       let currentStep = 0;
       let interval;
+      let audio = null;
+
+      function playSound(soundFile) {
+        if (audio) {
+          audio.pause();
+          audio.currentTime = 0;
+        }
+        audio = new Audio(soundFile);
+        audio.play();
+      }
 
       function startBreathingCycle() {
-        const { text, scale } = breathingSteps[currentStep];
+        const { text, scale, sound } = breathingSteps[currentStep];
         instructions.textContent = text;
         circle.style.transform = `scale(${scale})`;
         circle.style.transition = `transform ${cycleDuration / 1000}s`;
+        playSound(sound); // Play the sound for the current step
 
         currentStep = (currentStep + 1) % breathingSteps.length;
       }
 
       function startMeditation() {
-        startBtn.style.display = "none"; // Hide the button
-        instructions.textContent = "Get ready...";
+        startBtn.style.display = "none"; // Hide the Start button
+        stopBtn.style.display = "inline-block"; // Show the Stop button
+        instructions.textContent = "Get Ready...";
         interval = setInterval(startBreathingCycle, cycleDuration);
         startBreathingCycle(); // Trigger the first step
       }
 
-      // Attach event listener to the start button
+      function stopMeditation() {
+        clearInterval(interval); // Stop the breathing cycle
+        if (audio) {
+          audio.pause(); // Stop any playing sound
+          audio.currentTime = 0; // Reset audio
+        }
+        instructions.textContent =
+          "Meditation Stopped. Click 'Start' to Begin Again.";
+        circle.style.transform = "scale(1)"; // Reset circle size
+        startBtn.style.display = "inline-block"; // Show the Start button
+        stopBtn.style.display = "none"; // Hide the Stop button
+      }
+
+      // Event listeners for buttons
       startBtn.addEventListener("click", startMeditation);
+      stopBtn.addEventListener("click", stopMeditation);
     </script>
   </body>
 </html>
