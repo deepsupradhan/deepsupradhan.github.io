@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Snake Game</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #000;
+        color: #fff;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+      }
+
+      #gameContainer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+      }
+
+      #scoreBox {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        padding: 10px;
+        background-color: #333;
+        border-radius: 10px;
+        width: 200px;
+        text-align: center;
+      }
+
+      canvas {
+        border: 2px solid #fff;
+      }
+
+      #controls {
+        margin-top: 20px;
+      }
+
+      .control-btn {
+        font-size: 18px;
+        padding: 10px 20px;
+        margin: 5px;
+        background-color: #444;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .control-btn:active {
+        background-color: #666;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="gameContainer">
+      <div id="scoreBox">Score: 0</div>
+      <canvas id="snakeGame" width="400" height="400"></canvas>
+      <div id="controls">
+        <button id="up" class="control-btn">Up</button><br />
+        <button id="left" class="control-btn">Left</button>
+        <button id="down" class="control-btn">Down</button>
+        <button id="right" class="control-btn">Right</button>
+      </div>
+    </div>
+    <script src="game.js"></script>
+  </body>
+</html>
